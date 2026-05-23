@@ -33,29 +33,49 @@ const getAllIssuesFromDB = async (
   let initialData = `SELECT * FROM issues`;
   const conditions = [];
 
-  if(typeValue){
+  if (typeValue) {
     conditions.push(`type = '${typeValue}'`);
   }
 
-  if(statusValue){
+  if (statusValue) {
     conditions.push(`status = '${statusValue}'`);
   }
 
-  if(conditions.length){
+  if (conditions.length) {
     initialData += ` WHERE ` + conditions.join(' AND ');
   }
 
-  if(sortValue === 'newest'){
+  if (sortValue === 'newest') {
     initialData += ` ORDER BY created_at DESC`;
   }
-  if(sortValue === 'oldest'){
+
+  if (sortValue === 'oldest') {
     initialData += ` ORDER BY created_at ASC`;
   }
 
   const result = await pool.query(initialData);
 
-  return result;
-}
+  const optimizeResult = await Promise.all(
+    result.rows.map(async (issue) => {
+
+      const reporterId = issue.reporter_id;
+      // console.log(reporterId)
+
+      const reporterData = await pool.query(
+        `SELECT id, name, role FROM usersProfile WHERE id = $1`,
+        [reporterId]
+      )
+      
+
+      const reporter =  reporterData.rows[0]
+      // console.log(reporter)
+
+      return { ...issue, reporter}
+    })
+  )
+
+  return optimizeResult;
+};
 
 
 

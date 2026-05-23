@@ -70,14 +70,15 @@ const getAllIssuesBySort =  async(req : Request , res : Response) => {
 
   const result = await issuesService.getAllIssuesFromDB(
     sortValue,
-    typeValue,
-    statusValue)
+  typeValue,
+  statusValue
+);
 
       res.status(200).json(
       { 
         sucess : true,
         message : "Issues retrived sucessfully",
-        data : result.rows
+        data : result
       }
       )
    }catch(error : any){
