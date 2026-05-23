@@ -70,8 +70,8 @@ const getAllIssuesBySort =  async(req : Request , res : Response) => {
 
   const result = await issuesService.getAllIssuesFromDB(
     sortValue,
-  typeValue,
-  statusValue
+    typeValue,
+    statusValue
 );
 
       res.status(200).json(
@@ -129,9 +129,13 @@ const updateIssue = async(req : Request , res : Response) => {
 
   const {id} = req.params
   const contributor = req.userData?.contributor
-  const reporter_id = req.body.reporter_id
+  const reporter_id = req.userData?.reporter_id
 
+  
   try {
+
+    console.log(contributor)
+    console.log(reporter_id)
 
     const result = await issuesService.updateIssueFromDB(req.body, id as string)
 
@@ -195,6 +199,6 @@ export const issuesControler = {
     createIssues,
     getAllIssuesBySort,
     getSingleIssue,
-    // updateUser,
+    updateIssue,
     // deleteUser
 }

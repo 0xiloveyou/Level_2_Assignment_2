@@ -9,7 +9,7 @@ const router = Router()
 router.post('/', issuesControler.createIssues)
 router.get('/', issuesControler.getAllIssuesBySort)
 router.get('/:id', issuesControler.getSingleIssue)
-router.put('/:id',auth(UserProfile_Role.maintainer), issuesControler.getSingleIssue)
+router.patch('/:id',auth(UserProfile_Role.maintainer), issuesControler.updateIssue)
 
 // router.get('/', auth(User_Role.admin, User_Role.agent), userControler.getAllUsers)
 // router.get('/:id', userControler.getSingleUser)
