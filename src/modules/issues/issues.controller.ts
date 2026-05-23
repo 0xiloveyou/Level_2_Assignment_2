@@ -93,43 +93,36 @@ const getAllIssuesBySort =  async(req : Request , res : Response) => {
 }
 
 
-// const getSingleUser = async(req : Request , res : Response) => {
+const getSingleIssue = async(req : Request , res : Response) => {
 
-//    const {id} = req.params
+   const {id} = req.params
+   
 
-//   try {
+  try {
+
     
-//     const result = await userService.getSingelUserFromDB(id as string)
-//     /// as ts can't recoginze the type we used as keyword
+    const result = await issuesService.getSingelIssueFromDB(id as string)
+    /// as ts can't recoginze the type we used as keyword
 
-//       if(result.rows.length === 0){
-//         res.status(404).json(
-//       { 
-//         sucess : false,
-//         message : "User not found",
-//         data : {}
-//       })
-//       }
+      res.status(200).json(
+      { 
+        success : true,
+        message : "Issue retrived successfully",
+        data : result
+      }
+      )
 
-//       res.status(200).json(
-//       { 
-//         sucess : true,
-//         message : "users retrived sucessfully",
-//         data : result.rows[0]
-//       }
-//       )
+  }catch(error : any ){
+     res.status(500).json(
+      { 
+        success : false,
+        message : error.message,
+        error : error
+      }
+      )
+  }
 
-//   }catch(error : any ){
-//      res.status(500).json(
-//       { 
-//         sucess : false,
-//         message : error.message,
-//         error : error
-//       }
-//       )
-//   }
-
-// }
+}
 
 
 // const updateUser = async(req : Request , res : Response) => {
@@ -199,7 +192,7 @@ const getAllIssuesBySort =  async(req : Request , res : Response) => {
 export const issuesControler = {
     createIssues,
     getAllIssuesBySort,
-    // getSingleUser,
+    getSingleIssue,
     // updateUser,
     // deleteUser
 }

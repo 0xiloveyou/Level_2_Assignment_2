@@ -74,19 +74,33 @@ const getAllIssuesFromDB = async (
     })
   )
 
-  return optimizeResult;
-};
+  return optimizeResult
+}
 
 
 
-// const getSingelUserFromDB = async(id : string) => {
-//     const result = await pool.query(`
+const getSingelIssueFromDB = async(id : string) => {
+   
+  const result = await pool.query(`
+      SELECT * FROM issues  WHERE id = $1
+      `, [id])
+    
+     if(result.rows.length === 0) {
+      throw new Error("issue not exist")
+     }
+
+      const reporterId = result.rows[0].reporter_id
+ 
+      const reporterData = await pool.query(
+        `SELECT id, name, role FROM usersProfile WHERE id = $1`,
+        [reporterId]
+      )
       
-//       SELECT * FROM users  WHERE id = $1
-//       `, [id])
-//       return result
+      const reporter =  {...reporterData.rows[0]}
+      const newResult = { ...result.rows[0], reporter}
 
-// }
+      return newResult
+}
 
 // const updateUserFromDB = async(payload : IUser, id : string) => {
 
@@ -115,7 +129,7 @@ const getAllIssuesFromDB = async (
 export const issuesService = {
     createIssuesIntoDB,
     getAllIssuesFromDB,
-    // getSingelUserFromDB,
+    getSingelIssueFromDB,
     // updateUserFromDB,
     // deleteUserFromDB
 }

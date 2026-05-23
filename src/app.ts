@@ -23,7 +23,6 @@ app.use(express.urlencoded({extended : true}))
 app.use('/api/auth/signup', userRoute)
 app.use('/api/auth/login', authRoute)
 app.use('/api/issues', issuesRoute)
-app.use('/api/issues', issuesRoute)
 
 
 // app.get('/', (req : Request, res : Response) => { 
