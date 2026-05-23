@@ -24,12 +24,40 @@ const createIssuesIntoDB = async(payload : any) => {
 }
  
 
-// const getAllUsersFromDB = async() => {
-//     const result = await pool.query(`
-//         SELECT * FROM users
-//       `)
-//       return result
-// }
+const getAllIssuesFromDB = async (
+  sortValue = 'newest',
+  typeValue?: string,
+  statusValue?: string
+) => {
+
+  let initialData = `SELECT * FROM issues`;
+  const conditions = [];
+
+  if(typeValue){
+    conditions.push(`type = '${typeValue}'`);
+  }
+
+  if(statusValue){
+    conditions.push(`status = '${statusValue}'`);
+  }
+
+  if(conditions.length){
+    initialData += ` WHERE ` + conditions.join(' AND ');
+  }
+
+  if(sortValue === 'newest'){
+    initialData += ` ORDER BY created_at DESC`;
+  }
+  if(sortValue === 'oldest'){
+    initialData += ` ORDER BY created_at ASC`;
+  }
+
+  const result = await pool.query(initialData);
+
+  return result;
+}
+
+
 
 // const getSingelUserFromDB = async(id : string) => {
 //     const result = await pool.query(`
@@ -66,7 +94,7 @@ const createIssuesIntoDB = async(payload : any) => {
 
 export const issuesService = {
     createIssuesIntoDB,
-    // getAllUsersFromDB,
+    getAllIssuesFromDB,
     // getSingelUserFromDB,
     // updateUserFromDB,
     // deleteUserFromDB

@@ -63,13 +63,20 @@ sendResponse(res, {
 
 const getAllIssuesBySort =  async(req : Request , res : Response) => {
    try{
-      
-      const result = await userService.getAllUsersFromDB()
+
+  const sortValue = req.query.sort as string;
+  const typeValue = req.query.type as string;
+  const statusValue = req.query.status as string;
+
+  const result = await issuesService.getAllIssuesFromDB(
+    sortValue,
+    typeValue,
+    statusValue)
 
       res.status(200).json(
       { 
         sucess : true,
-        message : "users retrived sucessfully",
+        message : "Issues retrived sucessfully",
         data : result.rows
       }
       )
