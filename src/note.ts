@@ -15,6 +15,7 @@ npm i --save-dev @types/jsonwebtoken
 npm i --save-dev @types/cookie-parser
 npm i cors
 npm i --save-dev @types/cors
+npm i express-namespace
 
 ---------------------------------------------
 

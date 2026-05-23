@@ -125,38 +125,40 @@ const getSingleIssue = async(req : Request , res : Response) => {
 }
 
 
-// const updateUser = async(req : Request , res : Response) => {
+const updateIssue = async(req : Request , res : Response) => {
 
-//   const {id} = req.params
+  const {id} = req.params
+  const contributor = req.userData?.contributor
+  const reporter_id = req.body.reporter_id
 
-//   try {
+  try {
 
-//     const result = await userService.updateUserFromDB(req.body, id as string)
+    const result = await issuesService.updateIssueFromDB(req.body, id as string)
 
-//     if(result.rows.length === 0){
-//         res.status(404).json(
-//       { 
-//         sucess : false,
-//         message : "User not found",
-//         data : {}
-//       })
-//       }
+    if(result.rows.length === 0){
+        res.status(404).json(
+      { 
+        sucess : false,
+        message : "User not found",
+        data : {}
+      })
+      }
 
-//     res.status(200).json({ 
-//         sucess : true,
-//         message : "users updated sucessfully",
-//         data : result.rows[0]
-//       })
-//   } catch(error : any ){
-//      res.status(500).json(
-//       { 
-//         sucess : false,
-//         message : error.message,
-//         error : error
-//       })
-//   }
+    res.status(200).json({ 
+        sucess : true,
+        message : "Issue updated sucessfully",
+        data : result.rows[0]
+      })
+  } catch(error : any ){
+     res.status(500).json(
+      { 
+        sucess : false,
+        message : error.message,
+        error : error
+      })
+  }
 
-// }
+}
 
 // const deleteUser = async(req : Request , res : Response) => {
 
