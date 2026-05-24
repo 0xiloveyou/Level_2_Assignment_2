@@ -11,11 +11,8 @@ router.get('/', issuesControler.getAllIssuesBySort)
 router.get('/:id', issuesControler.getSingleIssue)
 router.patch('/:id',
        authIssue(UserProfile_Role.maintainer),
-       issuesControler.updateIssue)
+       issuesControler.updateIssue) /// contributor related logic handled inside the middlewere fucntion 
+router.delete('/:id',auth(UserProfile_Role.maintainer), issuesControler.deleteIssue)
 
-// router.get('/', auth(User_Role.admin, User_Role.agent), userControler.getAllUsers)
-// router.get('/:id', userControler.getSingleUser)
-// router.put('/:id', userControler.updateUser)
-// router.delete('/:id', userControler.deleteUser)
 
 export const issuesRoute = router

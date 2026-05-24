@@ -55,7 +55,8 @@ export const authIssue = (...roles : ROLES[]) => {
    else{
       const contributorId = user.id 
       const {id} = req.params /// isuue's id number
-
+                              /// params --> /:id
+                              
      if ("status" in req.body) {
             return res.status(403).json({
                success: false,
@@ -70,7 +71,7 @@ export const authIssue = (...roles : ROLES[]) => {
       const issueInfo = preResult.rows[0]
       const {reporter_id, status} = issueInfo
 
-      
+
       if(reporter_id === contributorId){
          
          if(status === 'open'){

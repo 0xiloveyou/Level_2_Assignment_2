@@ -120,17 +120,17 @@ const updateIssueFromDB = async(payload : IssueTable, id : string, ) => {
     return result
 }
 
-// const deleteUserFromDB = async(id : string) => {
-//     const result = await pool.query(`
-//       DELETE FROM users WHERE id = $1
-//       `, [id])
-//       return result
-// }
+const deleteIssueFromDB = async(id : string) => {
+    const result = await pool.query(`
+      DELETE FROM issues WHERE id = $1
+      `, [id])
+      return result
+}
 
 export const issuesService = {
     createIssuesIntoDB,
     getAllIssuesFromDB,
     getSingelIssueFromDB,
     updateIssueFromDB,
-    // deleteUserFromDB
+    deleteIssueFromDB
 }

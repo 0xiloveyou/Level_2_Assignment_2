@@ -9,9 +9,6 @@ const auth = (...roles : ROLES[]) => {
    
    return async (req : Request, res : Response, next : NextFunction) => {
 
-      /// server crash if it can't decode properly 
-      /// to handle that we have to use try catch
-      
    try {
       
       /*
@@ -46,45 +43,15 @@ const auth = (...roles : ROLES[]) => {
       })
    }
 
-   if(roles.includes(user.role)){
-     req.userData = decoded
-     return next()
-
-     // return res.status(403).json({
-      // success: false,
-      // message : "Forbidden. user role has no acess"
-      // })
-   }
-   else{
-      const maintainerId = user.id 
-      const {id} = req.body /// isuue's id number
-
-      const preResult  = await pool.query(`
-       SELECT * FROM issues  WHERE id = $1
-       `, [id])
-      const {reporter_id, status} = preResult.rows[0]
-
-      if(reporter_id === maintainerId){
-         if(status === 'open'){
-            req.userData = decoded
-            return next()
-         }
-         else{
-             return res.status(403).json({
-             success: false,
-             message : "Status is not open. So not allowed to update"
-          })
-         }
-      }
-      else{
-         return res.status(403).json({
-         success: false,
-         message : "Can't update others issue"
-       })
-      }
-
+   if(roles.length && !roles.includes(user.role)){
+      return res.status(403).json({
+      success: false,
+      message : "Forbidden. user role has no acess"
+      })
    }
 
+   req.userData = decoded
+   next()
       
    } catch (error) {
       next(error)
