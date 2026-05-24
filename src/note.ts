@@ -18,6 +18,7 @@ npm i --save-dev @types/cors
 npm i express-namespace
 
 ---------------------------------------------
+# Test Data for api end points
 
 post -> http://localhost:5000/api/auth/signup
 
