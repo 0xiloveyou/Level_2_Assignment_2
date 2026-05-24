@@ -123,6 +123,7 @@ const updateIssueFromDB = async(payload : IssueTable, id : string, ) => {
 const deleteIssueFromDB = async(id : string) => {
     const result = await pool.query(`
       DELETE FROM issues WHERE id = $1
+      RETURNING *
       `, [id])
       return result
 }
