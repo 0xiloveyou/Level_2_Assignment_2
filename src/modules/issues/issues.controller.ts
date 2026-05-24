@@ -33,9 +33,7 @@ sendResponse(res, {
   data : error,
 })
 }
-
 }
-
 
 const getAllIssuesBySort =  async(req : Request , res : Response) => {
    try{

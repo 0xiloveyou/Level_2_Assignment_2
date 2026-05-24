@@ -1,10 +1,9 @@
 import bcrypt from "bcryptjs"
 import { pool } from "../../db"
-import type { IssueTable } from "./issue.interface"
-// import type { UserProfileInterface } from "./usersProfile.interface"
+import type { IssueInsert, IssueTable } from "./issue.interface"
 
-const createIssuesIntoDB = async(payload : any) => {
- 
+const createIssuesIntoDB = async(payload : IssueInsert) => {
+  
     const { title,
             description,
             type,

@@ -11,3 +11,7 @@ Method -> POST - time -> 1779611442677 URL -> /api/issues
 Method -> POST - time -> 1779611451476 URL -> /api/issues
 Method -> POST - time -> 1779611497442 URL -> /api/auth/login
 Method -> POST - time -> 1779611511317 URL -> /api/issues
+Method -> POST - time -> 1779611979403 URL -> /api/issues
+Method -> POST - time -> 1779611983426 URL -> /api/issues
+Method -> POST - time -> 1779611985993 URL -> /api/issues
+Method -> POST - time -> 1779612083956 URL -> /api/issues
