@@ -8,6 +8,7 @@ import { globalErrorHandler } from "./middleware/globalErrorHandler"
 import { userRoute } from "./modules/usersProfile/usersProfile.route"
 import { authRoute } from "./auth/auth.route"
 import { issuesRoute } from "./modules/issues/issues.route"
+import logger from "./middleware/logger"
 
 
 const app : Application = express() 
@@ -16,8 +17,8 @@ app.use(express.json())
 app.use(express.text())
 app.use(express.urlencoded({extended : true})) 
 // app.use(CookieParser())
-// app.use(logger)
-// app.use(cors({origin : "http://localhost:5000"}))
+app.use(logger)
+app.use(cors({origin : "http://localhost:5000"}))
 
  
 app.use('/api/auth/signup', userRoute)
