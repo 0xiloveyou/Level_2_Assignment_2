@@ -6,7 +6,7 @@ import { authIssue } from "../../middleware/auth.Issues";
 
 const router = Router() 
 
-router.post('/', issuesControler.createIssues)
+router.post('/', auth(UserProfile_Role.maintainer, UserProfile_Role.contributor), issuesControler.createIssues)
 router.get('/', issuesControler.getAllIssuesBySort)
 router.get('/:id', issuesControler.getSingleIssue)
 router.patch('/:id',

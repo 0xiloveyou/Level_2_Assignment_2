@@ -3,6 +3,7 @@ import jwt, { type JwtPayload }  from "jsonwebtoken"
 import config from "../config"
 import { pool } from "../db"
 import type { ROLES } from "../types"
+import sendResponse from "../utility/sendResponse"
 
 
 const auth = (...roles : ROLES[]) => {
@@ -12,20 +13,22 @@ const auth = (...roles : ROLES[]) => {
    try {
       
       /*
-      > check if hte token is exists
-       > verify the token 
-        > find the user into database 
-         > if the user active or not
+      > check if the token is exists
+      > verify the token 
+      > find the user into database 
+      > validate the role 
       */
 
    // console.log(req.headers) 
    const token = req.headers.authorization
 
    if(!token){
-      return res.status(401).json({
-      success: false,
-      message : "unauthorized access"
-      })
+      return sendResponse(res, {
+             statusCode : 401,
+             sucess : false,
+             message : "unauthorized access",
+            })
+      
    }
 
    const decoded = jwt.verify(token as string, config.secret as string) as JwtPayload
@@ -37,17 +40,19 @@ const auth = (...roles : ROLES[]) => {
    const user = userData.rows[0]
 
    if(userData.rows.length === 0){
-      return res.status(404).json({
-      success: false,
-      message : "user not found on the database"
-      })
+      return sendResponse(res, {
+             statusCode : 404,
+             sucess : false,
+             message : "User not found on the database",
+            })
    }
 
    if(roles.length && !roles.includes(user.role)){
-      return res.status(403).json({
-      success: false,
-      message : "Forbidden. user role has no acess"
-      })
+      return sendResponse(res, {
+             statusCode : 403,
+             sucess : false,
+             message : "Forbidden. User role has no acess",
+            }) 
    }
 
    req.userData = decoded

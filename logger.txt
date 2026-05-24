@@ -7,3 +7,7 @@ Method -> DELETE - time -> 1779601963709 URL -> /api/issues/7
 Method -> GET - time -> 1779607900097 URL -> /
 Method -> GET - time -> 1779607900180 URL -> /favicon.ico
 Method -> GET - time -> 1779608390240 URL -> /
+Method -> POST - time -> 1779611442677 URL -> /api/issues
+Method -> POST - time -> 1779611451476 URL -> /api/issues
+Method -> POST - time -> 1779611497442 URL -> /api/auth/login
+Method -> POST - time -> 1779611511317 URL -> /api/issues

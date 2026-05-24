@@ -1,7 +1,6 @@
 import type { Request, Response } from "express"
 import sendResponse from "../../utility/sendResponse"
 import { issuesService } from "./issues.service"
-// import { userService } from "./usersProfile.service"
 import jwt, { type JwtPayload }  from "jsonwebtoken"
 import config from "../../config"
 import { pool } from "../../db"
@@ -11,36 +10,10 @@ const createIssues  = async (req : Request, res : Response ) => {
 
 try{
 
-  const accessToken = req.headers.authorization 
-
-  if(!accessToken){
-     return sendResponse(res, {
-       statusCode : 401,
-       sucess : false,
-       message : "unauthorized access",
-      }) 
-   }
-
-   const decoded = jwt.verify(accessToken as string, config.secret as string) as JwtPayload
-   /// after decode we need to give type --> jwtPayload
-   const userData = await pool.query(`
-      SELECT *  FROM usersProfile WHERE email = $1
-      `, [decoded.email])
-
-   const user = userData.rows[0]
-
-   if(userData.rows.length === 0){
-      return sendResponse(res, {
-             statusCode : 404,
-             sucess : false,
-             message : "User not found on the database",
-            }) 
-   }
-  
-  const inputData = {
-    "reporter_id" :  user.id,
+    const inputData = {
+    "reporter_id" : req.userData?.id,
     ...req.body
-  }
+    }
   
   const result = await issuesService.createIssuesIntoDB(inputData)
  
