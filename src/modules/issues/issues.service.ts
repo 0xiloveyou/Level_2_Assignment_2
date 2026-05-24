@@ -6,19 +6,19 @@ import type { IssueTable } from "./issue.interface"
 const createIssuesIntoDB = async(payload : any) => {
  
     const { title,
-      description,
-      type,
-      reporter_id} = payload
+            description,
+            type,
+            reporter_id} = payload
    
       const status = "open" // default set status to open when creating new issue
 
-    const result = await pool.query(`
-     INSERT INTO issues (title,
+      const result = await pool.query(`
+      INSERT INTO issues (title,
       description,
       type,
-      status ,
+      status,
       reporter_id) VALUES($1,$2,$3,$4,$5)
-     RETURNING *
+      RETURNING *
      `, [title,description, type,status,reporter_id])
 
      return result
@@ -26,7 +26,7 @@ const createIssuesIntoDB = async(payload : any) => {
  
 
 const getAllIssuesFromDB = async (
-  sortValue = 'newest',
+  sortValue = 'newest', /// default paramiter
   typeValue?: string,
   statusValue?: string
 ) => {
@@ -87,7 +87,7 @@ const getSingelIssueFromDB = async(id : string) => {
       `, [id])
     
      if(result.rows.length === 0) {
-      throw new Error("issue not exist")
+       throw new Error("issue not exist")
      }
 
       const reporterId = result.rows[0].reporter_id

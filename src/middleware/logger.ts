@@ -11,7 +11,7 @@ const logger = (req : Request, res : Response, next : NextFunction) => {
   /// file name logger.txt
   /// if error --> 
   fs.appendFile('logger.txt', log, (err) => {
-    console.log(err)
+    // console.log(err)
   })
 
   next()

@@ -14,11 +14,13 @@ try{
   const accessToken = req.headers.authorization 
 
   if(!accessToken){
-     return  res.status(401).json({
-      success: false,
-      message : "unauthorized access"
-      })
+     return sendResponse(res, {
+       statusCode : 401,
+       sucess : false,
+       message : "unauthorized access",
+      }) 
    }
+
    const decoded = jwt.verify(accessToken as string, config.secret as string) as JwtPayload
    /// after decode we need to give type --> jwtPayload
    const userData = await pool.query(`
@@ -28,10 +30,11 @@ try{
    const user = userData.rows[0]
 
    if(userData.rows.length === 0){
-      return res.status(404).json({
-      success: false,
-      message : "user not found on the database"
-      })
+      return sendResponse(res, {
+             statusCode : 404,
+             sucess : false,
+             message : "User not found on the database",
+            }) 
    }
   
   const inputData = {
@@ -41,11 +44,11 @@ try{
   
   const result = await issuesService.createIssuesIntoDB(inputData)
  
-  sendResponse(res, {
-  statusCode : 201,
-  sucess : true,
-  message : "User registered successfully",
-  data : result.rows[0],
+   sendResponse(res, {
+   statusCode : 201,
+   sucess : true,
+   message : "Issue created successfully",
+   data : result.rows[0],
 })
 
 }catch(error : any){ /// we don't know the type of error
@@ -71,55 +74,54 @@ const getAllIssuesBySort =  async(req : Request , res : Response) => {
   const result = await issuesService.getAllIssuesFromDB(
     sortValue,
     typeValue,
-    statusValue
-);
+    statusValue)
 
-      res.status(200).json(
-      { 
-        sucess : true,
-        message : "Issues retrived sucessfully",
-        data : result
-      }
-      )
+    sendResponse(res, {
+     statusCode : 200,
+     sucess : true,
+     message : "Issues retrived sucessfully",
+     data : result,
+     })
+
+     
    }catch(error : any){
-         res.status(500).json(
-      { 
-        sucess : false,
-        message : error.message,
-        error : error
-      }
-      )
+
+    sendResponse(res, {
+     statusCode : 500,
+     sucess : false,
+     message : error.message,
+     data : error,
+     })
+         
    }
 }
 
 
 const getSingleIssue = async(req : Request , res : Response) => {
 
-   const {id} = req.params
-   
+  const {id} = req.params
 
   try {
 
-    
     const result = await issuesService.getSingelIssueFromDB(id as string)
     /// as ts can't recoginze the type we used as keyword
 
-      res.status(200).json(
-      { 
-        success : true,
-        message : "Issue retrived successfully",
-        data : result
-      }
-      )
+    sendResponse(res, {
+      statusCode : 200,
+      sucess : true,
+      message : "Issue retrived successfully",
+      data : result,
+     })
+      
 
   }catch(error : any ){
-     res.status(500).json(
-      { 
-        success : false,
-        message : error.message,
-        error : error
-      }
-      )
+
+     sendResponse(res, {
+       statusCode : 500,
+       sucess : false,
+       message : error.message,
+       data : error,
+     })
   }
 
 }
@@ -134,26 +136,28 @@ const updateIssue = async(req : Request , res : Response) => {
     const result = await issuesService.updateIssueFromDB(req.body, id as string)
 
     if(result.rows.length === 0){
-        res.status(404).json(
-      { 
-        sucess : false,
-        message : "User not found",
-        data : {}
-      })
+
+        return sendResponse(res, {
+             statusCode : 404,
+             sucess : false,
+             message : "issue not found on the database",
+            })
       }
 
-    res.status(200).json({ 
-        sucess : true,
-        message : "Issue updated sucessfully",
-        data : result.rows[0]
-      })
+      sendResponse(res, {
+             statusCode : 200,
+             sucess : true,
+             message : "Issue updated sucessfully",
+             data : result.rows[0]
+            })
+    
   } catch(error : any ){
-     res.status(500).json(
-      { 
-        sucess : false,
-        message : error.message,
-        error : error
-      })
+     sendResponse(res, {
+      statusCode : 500,
+      sucess : false,
+      message : error.message,
+      data : error,
+     })
   }
 
 }
@@ -166,27 +170,26 @@ const deleteIssue = async(req : Request , res : Response) => {
        const result = await issuesService.deleteIssueFromDB(id as string)
 
        if(result.rows.length === 0){
-        return res.status(404).json(
-       { 
-        sucess : false,
-        message : "issue not found",
-        data : {}
-      })
-      }
+        return sendResponse(res, {
+             statusCode : 404,
+             sucess : false,
+             message : "issue not found on the database",
+            })
+        }
 
      return res.status(200).json({ 
         sucess : true,
-        message : "issue deleted sucessfully",
-        data : {}
+        message : "Issue deleted sucessfully"
       })
 
+
    } catch (error : any) {
-    res.status(500).json(
-      { 
-        sucess : false,
-        message : error.message,
-        error : error
-      })
+    sendResponse(res, {
+      statusCode : 500,
+      sucess : false,
+      message : error.message,
+      data : error,
+     })
    }
 }
 

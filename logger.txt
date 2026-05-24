@@ -1,1 +1,9 @@
 Method -> DELETE - time -> 1779601769432 URL -> /api/issues/7
+Method -> GET - time -> 1779601906343 URL -> /api/auth/signup
+Method -> GET - time -> 1779601906533 URL -> /api/auth/signup
+Method -> GET - time -> 1779601909744 URL -> /
+Method -> GET - time -> 1779601909790 URL -> /favicon.ico
+Method -> DELETE - time -> 1779601963709 URL -> /api/issues/7
+Method -> GET - time -> 1779607900097 URL -> /
+Method -> GET - time -> 1779607900180 URL -> /favicon.ico
+Method -> GET - time -> 1779608390240 URL -> /

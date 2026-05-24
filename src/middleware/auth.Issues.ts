@@ -3,31 +3,33 @@ import jwt, { type JwtPayload }  from "jsonwebtoken"
 import config from "../config"
 import { pool } from "../db"
 import type { ROLES } from "../types"
+import sendResponse from "../utility/sendResponse"
 
 
 export const authIssue = (...roles : ROLES[]) => {
    
    return async (req : Request, res : Response, next : NextFunction) => {
 
-     
    try {
       
       
       /*
-      > check if hte token is exists
-       > verify the token 
-        > find the user into database 
-         > if the user active or not
+      > check if the token is exists
+      > verify the token 
+      > find the user into database 
+      > if the user is allowed besed on role or not
       */
 
    // console.log(req.headers) 
    const token = req.headers.authorization
 
    if(!token){
-      return res.status(401).json({
-      success: false,
-      message : "unauthorized access"
-      })
+      return sendResponse(res, {
+             statusCode : 401,
+             sucess : false,
+             message : "unauthorized access",
+            })
+
    }
 
    const decoded = jwt.verify(token as string, config.secret as string) as JwtPayload
@@ -39,18 +41,18 @@ export const authIssue = (...roles : ROLES[]) => {
    const user = userData.rows[0]
 
    if(userData.rows.length === 0){
-      return res.status(404).json({
-      success: false,
-      message : "user not found on the database"
-      })
-   }
+      return sendResponse(res, {
+             statusCode : 404,
+             sucess : false,
+             message : "user not found on the database",
+            })
+    }
 
 
    if(roles.includes(user.role)){
 
      req.userData = decoded
      return next()
-
    }
    else{
       const contributorId = user.id 
@@ -58,10 +60,11 @@ export const authIssue = (...roles : ROLES[]) => {
                               /// params --> /:id
                               
      if ("status" in req.body) {
-            return res.status(403).json({
-               success: false,
-               message: "Contributor has no permission to change status"
-            })
+            return sendResponse(res, {
+             statusCode : 403,
+             sucess : false,
+             message : "Contributor has no permission to change status",
+            }) 
          }
 
       const preResult  = await pool.query(`
@@ -79,17 +82,20 @@ export const authIssue = (...roles : ROLES[]) => {
             return next()
          }
          else{
-             return res.status(403).json({
-             success: false,
-             message : "Status is not open. So not allowed to update"
-          })
+             return sendResponse(res, {
+             statusCode : 403,
+             sucess : false,
+             message : "Status is not open. So not allowed to update it.",
+            })
+
          }
       }
       else{
-         return res.status(403).json({
-         success: false,
-         message : "Can't update others issue"
-       })
+         return sendResponse(res, {
+             statusCode : 403,
+             sucess : false,
+             message : "Can't update others issue",
+            })
       }
    }
 
