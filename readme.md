@@ -71,8 +71,25 @@ A collaborative platform for software teams to report bugs, suggest features, an
 
 
 ---
+# set up & command of this project 
 
 ```
+npm init --y
+npm i -D typescript
+npx tsc --init
+npm i express
+npm i --save-dev @types/express
+npm i dotenv
+npm i -D tsx
+npm i pg
+npm i --save-dev @types/pg 
+npm i bcryptjs 
+npm i jsonwebtoken
+npm i --save-dev @types/jsonwebtoken
+npm i --save-dev @types/cookie-parser
+npm i cors
+npm i --save-dev @types/cors
+npm i express-namespace
 
 ```
 ---
