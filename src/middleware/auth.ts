@@ -25,7 +25,7 @@ const auth = (...roles : ROLES[]) => {
    const token = req.headers.authorization
 
    if(!token){
-      res.status(401).json({
+      return res.status(401).json({
       success: false,
       message : "unauthorized access"
       })
@@ -40,27 +40,52 @@ const auth = (...roles : ROLES[]) => {
    const user = userData.rows[0]
 
    if(userData.rows.length === 0){
-      res.status(404).json({
+      return res.status(404).json({
       success: false,
       message : "user not found on the database"
       })
    }
 
 
-   if(roles.length && !roles.includes(user.role)){
-      req.userData = {
-        ...decoded,
-        "contributer" : "true"
-     }
+   if(roles.includes(user.role)){
+     req.userData = decoded
+     return next
+
+     // return res.status(403).json({
+      // success: false,
+      // message : "Forbidden. user role has no acess"
+      // })
    }
    else{
-    req.userData = {
-        ...decoded,
-        "contributer" : "false"
-     }
+      const maintainerId = user.id 
+      const {id} = req.body /// isuue's id number
+
+      const preResult  = await pool.query(`
+       SELECT * FROM issues  WHERE id = $1
+       `, [id])
+      const {reporter_id, status} = preResult.rows[0]
+
+      if(reporter_id === maintainerId){
+         if(status === 'open'){
+            req.userData = decoded
+            return next()
+         }
+         else{
+             return res.status(403).json({
+             success: false,
+             message : "Status is not open. So not allowed to update"
+          })
+         }
+      }
+      else{
+         return res.status(403).json({
+         success: false,
+         message : "Can't update others issue"
+       })
+      }
+
    }
 
-   next()
       
    } catch (error) {
       next(error)

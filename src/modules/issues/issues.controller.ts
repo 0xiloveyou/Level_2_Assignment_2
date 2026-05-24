@@ -134,8 +134,8 @@ const updateIssue = async(req : Request , res : Response) => {
   
   try {
 
-    // console.log(contributor)
-    // console.log(reporter_id)
+    console.log(contributor)
+    console.log(reporter_id)
 
     const result = await issuesService.updateIssueFromDB(req.body, id as string)
 
