@@ -103,7 +103,7 @@ const getSingelIssueFromDB = async(id : string) => {
       return newResult
 }
 
-const updateIssueFromDB = async(payload : IssueTable, id : string) => {
+const updateIssueFromDB = async(payload : IssueTable, id : string, ) => {
 
     const {title, description, type, status} = payload
 

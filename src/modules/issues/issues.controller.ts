@@ -128,15 +128,9 @@ const getSingleIssue = async(req : Request , res : Response) => {
 const updateIssue = async(req : Request , res : Response) => {
 
   const {id} = req.params
-  const contributor = req.userData?.contributor
-  const reporter_id = req.userData?.reporter_id
 
-  
   try {
-
-    console.log(contributor)
-    console.log(reporter_id)
-
+    
     const result = await issuesService.updateIssueFromDB(req.body, id as string)
 
     if(result.rows.length === 0){

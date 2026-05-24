@@ -5,14 +5,13 @@ import { pool } from "../db"
 import type { ROLES } from "../types"
 
 
-const auth = (...roles : ROLES[]) => {
+export const authIssue = (...roles : ROLES[]) => {
    
    return async (req : Request, res : Response, next : NextFunction) => {
 
-      /// server crash if it can't decode properly 
-      /// to handle that we have to use try catch
-      
+     
    try {
+      
       
       /*
       > check if hte token is exists
@@ -46,25 +45,34 @@ const auth = (...roles : ROLES[]) => {
       })
    }
 
+
    if(roles.includes(user.role)){
+
      req.userData = decoded
      return next()
 
-     // return res.status(403).json({
-      // success: false,
-      // message : "Forbidden. user role has no acess"
-      // })
    }
    else{
-      const maintainerId = user.id 
-      const {id} = req.body /// isuue's id number
+      const contributorId = user.id 
+      const {id} = req.params /// isuue's id number
+
+     if ("status" in req.body) {
+            return res.status(403).json({
+               success: false,
+               message: "Contributor has no permission to change status"
+            })
+         }
 
       const preResult  = await pool.query(`
        SELECT * FROM issues  WHERE id = $1
        `, [id])
-      const {reporter_id, status} = preResult.rows[0]
 
-      if(reporter_id === maintainerId){
+      const issueInfo = preResult.rows[0]
+      const {reporter_id, status} = issueInfo
+
+      
+      if(reporter_id === contributorId){
+         
          if(status === 'open'){
             req.userData = decoded
             return next()
@@ -82,15 +90,12 @@ const auth = (...roles : ROLES[]) => {
          message : "Can't update others issue"
        })
       }
-
    }
 
       
    } catch (error) {
       next(error)
    }
-
 }
 }
 
-export default auth

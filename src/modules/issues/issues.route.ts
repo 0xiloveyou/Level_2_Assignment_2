@@ -1,20 +1,17 @@
 import { Router, type NextFunction } from "express";
-// import auth from "../../middleware/auth";
 import { issuesControler } from "./issues.controller";
 import { UserProfile_Role } from "../../types";
 import auth from "../../middleware/auth";
-// import maintainerAuthLogic from "../../middleware/maintainerAuthLogic";
- 
+import { authIssue } from "../../middleware/auth.Issues";
+
 const router = Router() 
 
 router.post('/', issuesControler.createIssues)
 router.get('/', issuesControler.getAllIssuesBySort)
 router.get('/:id', issuesControler.getSingleIssue)
 router.patch('/:id',
-    auth(UserProfile_Role.maintainer),
-    // maintainerAuthLogic(UserProfile_Role.maintainer,
-    //     UserProfile_Role.contributor),
-        issuesControler.updateIssue)
+       authIssue(UserProfile_Role.maintainer),
+       issuesControler.updateIssue)
 
 // router.get('/', auth(User_Role.admin, User_Role.agent), userControler.getAllUsers)
 // router.get('/:id', userControler.getSingleUser)
