@@ -2,8 +2,6 @@ import type { Request, Response } from "express"
 import sendResponse from "../../utility/sendResponse"
 import { issuesService } from "./issues.service"
 import jwt, { type JwtPayload }  from "jsonwebtoken"
-import config from "../../config"
-import { pool } from "../../db"
 
 
 const createIssues  = async (req : Request, res : Response ) => {

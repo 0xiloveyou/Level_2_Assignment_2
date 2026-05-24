@@ -4,7 +4,7 @@ declare global{
     namespace Express {
         interface Request {
             // currentUser: UserModel
-            userData? : JwtPayload
+            userData? : JwtPayload /// attached userData custom property inside the req
         }
     }
 }
